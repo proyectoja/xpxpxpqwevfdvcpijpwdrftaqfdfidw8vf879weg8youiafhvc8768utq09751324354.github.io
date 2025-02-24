@@ -1,0 +1,18 @@
+{
+  "peliculas": [
+    {
+      "id": "p",
+      "miniatura": "",
+      "poster": "",
+      "url": "",
+      "titulo": "",
+      "descripcion": "",
+      "fecha": "",
+      "duracion": "",
+      "calidad": "",
+      "perfilCanal": "",
+      "nombreCanal": "",
+      "checkVerificado": "iconos/check-verificado.png"
+    }
+  ]
+}
