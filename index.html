@@ -244,13 +244,15 @@
             font-family: Verdana, Geneva, Tahoma, sans-serif;
 
         }
-        #contenedorJWPLAYER img{
+
+        #contenedorJWPLAYER img {
             width: auto;
             height: 170px;
             margin-top: -60px;
             margin-bottom: -45px;
         }
-        #contenedorJWPLAYER{
+
+        #contenedorJWPLAYER {
             display: none;
             position: absolute;
             flex-direction: column;
@@ -264,35 +266,41 @@
             top: 0;
             left: 0;
             align-items: center;
-            background-color: rgba(0,0,0,0.8);
+            background-color: rgba(0, 0, 0, 0.8);
             border: 1px solid rgba(255, 255, 255, 0.5);
             color: white;
             font-family: Verdana, Geneva, Tahoma, sans-serif;
             font-size: 16px;
             text-shadow: 0 0 10px black;
         }
-        #jw-player{
+
+        #jw-player {
             min-height: 200px;
         }
-        #titulo-pop{
+
+        #titulo-pop {
             display: flex;
-            position: relative;;
+            position: relative;
+            ;
             font-size: 24px;
             font-weight: bold;
             padding: 10px;
         }
-        #descripcion-pop{
+
+        #descripcion-pop {
             display: flex;
             position: relative;
             font-style: italic;
             padding: 10px;
         }
-        #metadata-pop{
+
+        #metadata-pop {
             display: flex;
             position: relative;
             padding: 20px;
         }
-        #cerrar-pop{
+
+        #cerrar-pop {
             display: flex;
             position: relative;
             margin: 10px;
@@ -383,7 +391,7 @@
     function crearCarteles(cartel) {
         const videoItem = document.createElement("div");
         videoItem.classList.add("contenedor-video");
-        videoItem.addEventListener('click',function(){
+        videoItem.addEventListener('click', function () {
             contenedorJWPLAYER.style.display = 'flex';
             openPopJW(cartel);
         });
@@ -464,127 +472,124 @@
     const contenedorMetadataPop = document.getElementById('metadata-pop');
     const contenedorCerrarPop = document.getElementById('cerrar-pop');
     var jw = null;
-    function openPopJW(cartel){
+    const vast = "https://www.videosprofitnetwork.com/watch.xml?key=79e1ceeb4b2b23705f07f9d03d8920fe";
+    function openPopJW(cartel) {
         closePopJW();
         contenedorTituloPop.textContent = cartel.titulo;
         contenedorDescripcionPop.textContent = cartel.descripcion;
-        contenedorMetadataPop.textContent = "Año: "+cartel.fecha+" | Duración: "+cartel.duracion;
+        contenedorMetadataPop.textContent = "Año: " + cartel.fecha + " | Duración: " + cartel.duracion;
         jw = jwplayer("jw-player").setup({
-                    "debug": 1,
-                    "file": cartel.url,
-                    "image": cartel.poster,
-                    "title": cartel.titulo,
-                    "description": cartel.descripcion,
-                    "height": "auto",
-                    "width": "100%",
-                    "playbackRateControls": true,
-                    "logo": {
-                        "file": cartel.perfilCanal, //watermark image path
-                        "link": "", //link url on watermark image
-                        "hide": "false",
-                        "position": "top-right" //position of watermark on player
+            "debug": 1,
+            "file": cartel.url,
+            "image": cartel.poster,
+            "title": cartel.titulo,
+            "description": cartel.descripcion,
+            "height": "auto",
+            "width": "100%",
+            "playbackRateControls": true,
+            "logo": {
+                "file": cartel.perfilCanal, //watermark image path
+                "link": "", //link url on watermark image
+                "hide": "false",
+                "position": "top-right" //position of watermark on player
+            },
+            "preload": "metadata",
+            "repeat": false,
+            "sharing": false,
+            //{
+            //"heading": "Compartir Video",
+            //"link": "https://play.google.com/store/apps/details?id=proyecto.ja&hl=en_US",
+            //"sites": [
+            //{
+            //"icon": "https://i.imgur.com/7TleNbh.png",
+            //"src": "https://play.google.com/store/apps/details?id=proyecto.ja&hl=en_US",
+            //"label": "Play Store"
+            //}, "facebook", "twitter", "interest", "tumblr", "linkedin", "reddit", "email"
+            //]
+            //},
+            //"tracks": [{ "file": "<?php echo $cc; ?>", "label": "Español", "kind": "captions", "default": "false" },
+            //{ "file": "<?php echo $cc; ?>", "label": "English", "kind": "captions", "default": "false" }],
+            //"captions": { "color": '#ffb800', "fontSize": 30, "backgroundOpacity": 0 },
+            "skin": {
+                "controlbar": {
+                    "background": "rgba(0,0,0,0.5)",
+                    "icons": "#b8b8b8",
+                    "iconsActive": "#0066FF",
+                    "text": "#FFFFFF"
+                },
+                "menus": {
+                    "background": "#003366",
+                    "text": "#b8b8b8",
+                    "textActive": "#FFFFFF"
+                },
+                "name": "stormtrooper",
+                "timeslider": {
+                    "progress": "#0066FF"
+                },
+                "tooltips": {
+                    "background": "#0066FF",
+                    "text": "#FFFFFF"
+                }
+            },
+            "stretching": "uniform",
+            "autostart": false,
+            "cast": {},
+            "controls": true,
+            "defaultBandwidthEstimate": 5000000,
+            "displaydescription": true,
+            "displaytitle": true,
+            "aboutlink": "",
+            "abouttext": "Movie 24",
+
+
+
+            "advertising": {
+                "client": "vast",
+                "adscheduleid": "Az87bY12",
+                "schedule": [
+                    {
+                        "offset": "pre",
+                        "tag": vast
                     },
-                    "preload": "metadata",
-                    "repeat": false,
-                    "sharing": false,
-                    //{
-                        //"heading": "Compartir Video",
-                        //"link": "https://play.google.com/store/apps/details?id=proyecto.ja&hl=en_US",
-                        //"sites": [
-                            //{
-                                //"icon": "https://i.imgur.com/7TleNbh.png",
-                                //"src": "https://play.google.com/store/apps/details?id=proyecto.ja&hl=en_US",
-                                //"label": "Play Store"
-                            //}, "facebook", "twitter", "interest", "tumblr", "linkedin", "reddit", "email"
-                        //]
-                    //},
-                    //"tracks": [{ "file": "<?php echo $cc; ?>", "label": "Español", "kind": "captions", "default": "false" },
-                    //{ "file": "<?php echo $cc; ?>", "label": "English", "kind": "captions", "default": "false" }],
-                    //"captions": { "color": '#ffb800', "fontSize": 30, "backgroundOpacity": 0 },
-                    "skin": {
-                        "controlbar": {
-                            "background": "rgba(0,0,0,0.5)",
-                            "icons": "#b8b8b8",
-                            "iconsActive": "#0066FF",
-                            "text": "#FFFFFF"
-                        },
-                        "menus": {
-                            "background": "#003366",
-                            "text": "#b8b8b8",
-                            "textActive": "#FFFFFF"
-                        },
-                        "name": "stormtrooper",
-                        "timeslider": {
-                            "progress": "#0066FF"
-                        },
-                        "tooltips": {
-                            "background": "#0066FF",
-                            "text": "#FFFFFF"
-                        }
+                    {
+                        "offset": "50%",
+                        "tag": vast
                     },
-                    "stretching": "uniform",
-                    "autostart": false,
-                    "cast": {},
-                    "controls": true,
-                    "defaultBandwidthEstimate": 5000000,
-                    "displaydescription": true,
-                    "displaytitle": true,
-                    "aboutlink": "",
-                    "abouttext": "Movie 24",
-
-
-
-                    //"advertising": {
-                    //"client": "vast",
-                    //"adscheduleid": "Az87bY12",
-                    //"schedule": [
-                    //{
-                    //"offset": "pre",
-                    //"tag": vast
-                    //},
-                    //{
-                    //"offset": "25%",
-                    //"tag": vast
-                    //},
-                    //{
-                    //"offset": "50%",
-                    //"tag": vast
-                    //},
-                    //{
-                    //"offset": "75%",
-                    //"tag": vast
-                    //},
-                    //{
-                    //"offset": "post",
-                    //"tag": vast
-                    //}
-                    //]
-                    //},
-
-
-
-
-
-                    "horizontalVolumeSlider": true,
-                    "volume": 100,
-                    "nextupoffset": -30,
-                    "related": {
-                        "autoplaytimer": 10,
-                        "oncomplete": "autoplay"
+                    {
+                        "offset": "75%",
+                        "tag": vast
                     },
-                    "intl": {
-                        "en": {
-                            "related": {
-                                "autoplaymessage": "__title__ se reproducirá en xx segundos.",
-                                "heading": "Más Capítulos"
-                            }
-                        }
+                    {
+                        "offset": "post",
+                        "tag": vast
                     }
+                ]
+            },
 
-                });
+
+
+
+
+            "horizontalVolumeSlider": true,
+            "volume": 100,
+            "nextupoffset": -30,
+            "related": {
+                "autoplaytimer": 10,
+                "oncomplete": "autoplay"
+            },
+            "intl": {
+                "en": {
+                    "related": {
+                        "autoplaymessage": "__title__ se reproducirá en xx segundos.",
+                        "heading": "Más Capítulos"
+                    }
+                }
+            }
+
+        });
     }
-    function closePopJW(){
-        if(jw){
+    function closePopJW() {
+        if (jw) {
             jw.remove();
             jw = null;
             contenedorJWPLAYER.style.display = 'none';
@@ -594,4 +599,5 @@
 <script async
     id="chatBroEmbedCode">/* Chatbro Widget Embed Code Start */function ChatbroLoader(chats, async) { async = !1 !== async; var params = { embedChatsParameters: chats instanceof Array ? chats : [chats], lang: navigator.language || navigator.userLanguage, needLoadCode: 'undefined' == typeof Chatbro, embedParamsVersion: localStorage.embedParamsVersion, chatbroScriptVersion: localStorage.chatbroScriptVersion }, xhr = new XMLHttpRequest; xhr.withCredentials = !0, xhr.onload = function () { eval(xhr.responseText) }, xhr.onerror = function () { console.error('Chatbro loading error') }, xhr.open('GET', 'https://www.chatbro.com/embed.js?' + btoa(unescape(encodeURIComponent(JSON.stringify(params)))), async), xhr.send() }/* Chatbro Widget Embed Code End */ChatbroLoader({ encodedChatId: '98wVn' });</script>
 <script src="jwPlayer.js"></script>
+
 </html>
