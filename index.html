@@ -244,12 +244,18 @@
             font-family: Verdana, Geneva, Tahoma, sans-serif;
 
         }
+        #contenedorJWPLAYER img{
+            width: auto;
+            height: 170px;
+            margin-top: -60px;
+            margin-bottom: -45px;
+        }
         #contenedorJWPLAYER{
             display: none;
             position: absolute;
             flex-direction: column;
             z-index: 5;
-            margin: auto;
+            margin: 0;
             padding: 0;
             width: 100%;
             height: 100%;
@@ -257,32 +263,47 @@
             overflow-y: auto;
             top: 0;
             left: 0;
-            justify-content: center;
             align-items: center;
             background-color: rgba(0,0,0,0.8);
             border: 1px solid rgba(255, 255, 255, 0.5);
             color: white;
             font-family: Verdana, Geneva, Tahoma, sans-serif;
-            font-size: 16;
+            font-size: 16px;
+            text-shadow: 0 0 10px black;
+        }
+        #jw-player{
+            min-height: 200px;
         }
         #titulo-pop{
+            display: flex;
+            position: relative;;
             font-size: 24px;
             font-weight: bold;
             padding: 10px;
         }
         #descripcion-pop{
+            display: flex;
+            position: relative;
             font-style: italic;
             padding: 10px;
         }
         #metadata-pop{
-            padding: 10px;
+            display: flex;
+            position: relative;
+            padding: 20px;
         }
         #cerrar-pop{
+            display: flex;
+            position: relative;
+            margin: 10px;
             padding: 10px;
             background-color: #0066ff;
             border-radius: 1rem;
             border: 1px solid rgba(255, 255, 255, 0.5);
             cursor: pointer;
+            font-size: 20px;
+            text-shadow: 0 0 10px black;
+            box-shadow: inset 0 0 10px black;
         }
     </style>
 </head>
@@ -315,11 +336,12 @@
         <!-- END: Powered by Supercounters.com -->
     </div>
     <div id="contenedorJWPLAYER">
+        <img src="https://i.imgur.com/kwxr2Fb.png" alt="Movie24">
         <div id="jw-player"></div>
         <div id="titulo-pop"></div>
         <div id="descripcion-pop"></div>
         <div id="metadata-pop"></div>
-        <div id="cerrar-pop">Cerrar</div>
+        <div id="cerrar-pop" onclick="closePopJW()">Cerrar</div>
     </div>
 </body>
 <script>
@@ -327,7 +349,7 @@
     const contenedorContPelis = document.querySelector('.contenedor-cont-pelis');
     contenedorContPelis.style.cursor = 'pointer';
     let contPelis = 0;
-    const jsonUrl = "c0n73n1d0M0v13.json";
+    const jsonUrl = "https://proyectoja.github.io/xpxpxpqwevfdvcpijpwdrftaqfdfidw8vf879weg8youiafhvc8768utq09751324354.github.io/c0n73n1d0M0v13.json";
     const contenedorJWPLAYER = document.getElementById('contenedorJWPLAYER');
 
     contenedorContPelis.addEventListener('click', function () {
@@ -343,7 +365,7 @@
                 if (video.titulo) {
                     crearCarteles(video);
                     contPelis += 1;
-                    contenedorContPelis.textContent = `Total: ${contPelis} películas.`;
+                    contenedorContPelis.textContent = `Total: ${contPelis} películas. | Subiendo todos los días!!`;
                     peliculasArreglo = data.peliculas;
                 }
             })
@@ -436,27 +458,24 @@
 
     // Evento para la búsqueda en tiempo real
     inputBuscar.addEventListener("input", filtrarPeliculas);
-        
-        /*
-        <div id="titulo-pop"></div>
-        <div id="descripcion-pop"></div>
-        <div id="metadata-pop"></div>
-        */
 
     const contenedorTituloPop = document.getElementById('titulo-pop');
     const contenedorDescripcionPop = document.getElementById('descripcion-pop');
     const contenedorMetadataPop = document.getElementById('metadata-pop');
-    
+    const contenedorCerrarPop = document.getElementById('cerrar-pop');
+    var jw = null;
     function openPopJW(cartel){
+        closePopJW();
         contenedorTituloPop.textContent = cartel.titulo;
         contenedorDescripcionPop.textContent = cartel.descripcion;
-        jwplayer("jw-player").setup({
+        contenedorMetadataPop.textContent = "Año: "+cartel.fecha+" | Duración: "+cartel.duracion;
+        jw = jwplayer("jw-player").setup({
                     "debug": 1,
                     "file": cartel.url,
                     "image": cartel.poster,
                     "title": cartel.titulo,
                     "description": cartel.descripcion,
-                    "height": "400px",
+                    "height": "auto",
                     "width": "100%",
                     "playbackRateControls": true,
                     "logo": {
@@ -564,7 +583,13 @@
 
                 });
     }
-
+    function closePopJW(){
+        if(jw){
+            jw.remove();
+            jw = null;
+            contenedorJWPLAYER.style.display = 'none';
+        }
+    }
 </script>
 <script async
     id="chatBroEmbedCode">/* Chatbro Widget Embed Code Start */function ChatbroLoader(chats, async) { async = !1 !== async; var params = { embedChatsParameters: chats instanceof Array ? chats : [chats], lang: navigator.language || navigator.userLanguage, needLoadCode: 'undefined' == typeof Chatbro, embedParamsVersion: localStorage.embedParamsVersion, chatbroScriptVersion: localStorage.chatbroScriptVersion }, xhr = new XMLHttpRequest; xhr.withCredentials = !0, xhr.onload = function () { eval(xhr.responseText) }, xhr.onerror = function () { console.error('Chatbro loading error') }, xhr.open('GET', 'https://www.chatbro.com/embed.js?' + btoa(unescape(encodeURIComponent(JSON.stringify(params)))), async), xhr.send() }/* Chatbro Widget Embed Code End */ChatbroLoader({ encodedChatId: '98wVn' });</script>
