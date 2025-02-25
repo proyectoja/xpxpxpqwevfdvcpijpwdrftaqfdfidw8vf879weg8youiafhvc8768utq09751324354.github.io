@@ -25,6 +25,10 @@
             -webkit-user-drag: none;
         }
 
+        .jw-rightclick.jw-reset {
+            display: none !important;
+        }
+
         .contenedor-principal {
             display: flex;
             position: relative;
@@ -240,6 +244,46 @@
             font-family: Verdana, Geneva, Tahoma, sans-serif;
 
         }
+        #contenedorJWPLAYER{
+            display: none;
+            position: absolute;
+            flex-direction: column;
+            z-index: 5;
+            margin: auto;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            overflow-y: auto;
+            top: 0;
+            left: 0;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(0,0,0,0.8);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            color: white;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            font-size: 16;
+        }
+        #titulo-pop{
+            font-size: 24px;
+            font-weight: bold;
+            padding: 10px;
+        }
+        #descripcion-pop{
+            font-style: italic;
+            padding: 10px;
+        }
+        #metadata-pop{
+            padding: 10px;
+        }
+        #cerrar-pop{
+            padding: 10px;
+            background-color: #0066ff;
+            border-radius: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+        }
     </style>
 </head>
 
@@ -270,6 +314,13 @@
         </center>
         <!-- END: Powered by Supercounters.com -->
     </div>
+    <div id="contenedorJWPLAYER">
+        <div id="jw-player"></div>
+        <div id="titulo-pop"></div>
+        <div id="descripcion-pop"></div>
+        <div id="metadata-pop"></div>
+        <div id="cerrar-pop">Cerrar</div>
+    </div>
 </body>
 <script>
     const contenedorLista = document.querySelector('.contenedor-lista');
@@ -277,9 +328,10 @@
     contenedorContPelis.style.cursor = 'pointer';
     let contPelis = 0;
     const jsonUrl = "c0n73n1d0M0v13.json";
+    const contenedorJWPLAYER = document.getElementById('contenedorJWPLAYER');
 
     contenedorContPelis.addEventListener('click', function () {
-        document.querySelector('.contenedor-lateral-derecho').style.width = document.querySelector('.contenedor-lateral-derecho').style.width === '0px' ? '300px' : '0px';
+        document.querySelector('.contenedor-lateral-derecho').style.width = document.querySelector('.contenedor-lateral-derecho').style.width === '0px' ? '350px' : '0px';
     });
     // Función para cargar los datos desde el archivo JSON
     fetch(jsonUrl)
@@ -309,9 +361,10 @@
     function crearCarteles(cartel) {
         const videoItem = document.createElement("div");
         videoItem.classList.add("contenedor-video");
-        videoItem.onclick = function () {
-            window.open("embedClappr?id=" + encodeURIComponent(cartel.id), "_self");
-        };
+        videoItem.addEventListener('click',function(){
+            contenedorJWPLAYER.style.display = 'flex';
+            openPopJW(cartel);
+        });
         videoItem.style.cursor = "pointer";
 
         const calidadAux = document.createElement('div');
@@ -383,9 +436,137 @@
 
     // Evento para la búsqueda en tiempo real
     inputBuscar.addEventListener("input", filtrarPeliculas);
+        
+        /*
+        <div id="titulo-pop"></div>
+        <div id="descripcion-pop"></div>
+        <div id="metadata-pop"></div>
+        */
+
+    const contenedorTituloPop = document.getElementById('titulo-pop');
+    const contenedorDescripcionPop = document.getElementById('descripcion-pop');
+    const contenedorMetadataPop = document.getElementById('metadata-pop');
+    
+    function openPopJW(cartel){
+        contenedorTituloPop.textContent = cartel.titulo;
+        contenedorDescripcionPop.textContent = cartel.descripcion;
+        jwplayer("jw-player").setup({
+                    "debug": 1,
+                    "file": cartel.url,
+                    "image": cartel.poster,
+                    "title": cartel.titulo,
+                    "description": cartel.descripcion,
+                    "height": "400px",
+                    "width": "100%",
+                    "playbackRateControls": true,
+                    "logo": {
+                        "file": cartel.perfilCanal, //watermark image path
+                        "link": "", //link url on watermark image
+                        "hide": "false",
+                        "position": "top-right" //position of watermark on player
+                    },
+                    "preload": "metadata",
+                    "repeat": false,
+                    "sharing": false,
+                    //{
+                        //"heading": "Compartir Video",
+                        //"link": "https://play.google.com/store/apps/details?id=proyecto.ja&hl=en_US",
+                        //"sites": [
+                            //{
+                                //"icon": "https://i.imgur.com/7TleNbh.png",
+                                //"src": "https://play.google.com/store/apps/details?id=proyecto.ja&hl=en_US",
+                                //"label": "Play Store"
+                            //}, "facebook", "twitter", "interest", "tumblr", "linkedin", "reddit", "email"
+                        //]
+                    //},
+                    //"tracks": [{ "file": "<?php echo $cc; ?>", "label": "Español", "kind": "captions", "default": "false" },
+                    //{ "file": "<?php echo $cc; ?>", "label": "English", "kind": "captions", "default": "false" }],
+                    //"captions": { "color": '#ffb800', "fontSize": 30, "backgroundOpacity": 0 },
+                    "skin": {
+                        "controlbar": {
+                            "background": "rgba(0,0,0,0.5)",
+                            "icons": "#b8b8b8",
+                            "iconsActive": "#0066FF",
+                            "text": "#FFFFFF"
+                        },
+                        "menus": {
+                            "background": "#003366",
+                            "text": "#b8b8b8",
+                            "textActive": "#FFFFFF"
+                        },
+                        "name": "stormtrooper",
+                        "timeslider": {
+                            "progress": "#0066FF"
+                        },
+                        "tooltips": {
+                            "background": "#0066FF",
+                            "text": "#FFFFFF"
+                        }
+                    },
+                    "stretching": "uniform",
+                    "autostart": false,
+                    "cast": {},
+                    "controls": true,
+                    "defaultBandwidthEstimate": 5000000,
+                    "displaydescription": true,
+                    "displaytitle": true,
+                    "aboutlink": "",
+                    "abouttext": "Movie 24",
+
+
+
+                    //"advertising": {
+                    //"client": "vast",
+                    //"adscheduleid": "Az87bY12",
+                    //"schedule": [
+                    //{
+                    //"offset": "pre",
+                    //"tag": vast
+                    //},
+                    //{
+                    //"offset": "25%",
+                    //"tag": vast
+                    //},
+                    //{
+                    //"offset": "50%",
+                    //"tag": vast
+                    //},
+                    //{
+                    //"offset": "75%",
+                    //"tag": vast
+                    //},
+                    //{
+                    //"offset": "post",
+                    //"tag": vast
+                    //}
+                    //]
+                    //},
+
+
+
+
+
+                    "horizontalVolumeSlider": true,
+                    "volume": 100,
+                    "nextupoffset": -30,
+                    "related": {
+                        "autoplaytimer": 10,
+                        "oncomplete": "autoplay"
+                    },
+                    "intl": {
+                        "en": {
+                            "related": {
+                                "autoplaymessage": "__title__ se reproducirá en xx segundos.",
+                                "heading": "Más Capítulos"
+                            }
+                        }
+                    }
+
+                });
+    }
 
 </script>
 <script async
-        id="chatBroEmbedCode">/* Chatbro Widget Embed Code Start */function ChatbroLoader(chats, async) { async = !1 !== async; var params = { embedChatsParameters: chats instanceof Array ? chats : [chats], lang: navigator.language || navigator.userLanguage, needLoadCode: 'undefined' == typeof Chatbro, embedParamsVersion: localStorage.embedParamsVersion, chatbroScriptVersion: localStorage.chatbroScriptVersion }, xhr = new XMLHttpRequest; xhr.withCredentials = !0, xhr.onload = function () { eval(xhr.responseText) }, xhr.onerror = function () { console.error('Chatbro loading error') }, xhr.open('GET', 'https://www.chatbro.com/embed.js?' + btoa(unescape(encodeURIComponent(JSON.stringify(params)))), async), xhr.send() }/* Chatbro Widget Embed Code End */ChatbroLoader({ encodedChatId: '98wVn' });</script>
-
+    id="chatBroEmbedCode">/* Chatbro Widget Embed Code Start */function ChatbroLoader(chats, async) { async = !1 !== async; var params = { embedChatsParameters: chats instanceof Array ? chats : [chats], lang: navigator.language || navigator.userLanguage, needLoadCode: 'undefined' == typeof Chatbro, embedParamsVersion: localStorage.embedParamsVersion, chatbroScriptVersion: localStorage.chatbroScriptVersion }, xhr = new XMLHttpRequest; xhr.withCredentials = !0, xhr.onload = function () { eval(xhr.responseText) }, xhr.onerror = function () { console.error('Chatbro loading error') }, xhr.open('GET', 'https://www.chatbro.com/embed.js?' + btoa(unescape(encodeURIComponent(JSON.stringify(params)))), async), xhr.send() }/* Chatbro Widget Embed Code End */ChatbroLoader({ encodedChatId: '98wVn' });</script>
+<script src="jwPlayer.js"></script>
 </html>
