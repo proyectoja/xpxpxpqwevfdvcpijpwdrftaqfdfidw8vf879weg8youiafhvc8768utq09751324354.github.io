@@ -386,7 +386,7 @@
     fetch("c0n73n1d0M0v13.json")
         .then((response) => response.json()) // Convierte la respuesta en JSON
         .then((data) => {
-            data.peliculas.sort((a, b) => b.fecha - a.fecha);
+            //data.peliculas.sort((a, b) => b.fecha - a.fecha);
             //Modificar y validar según se agregen categorías del menú
             data.peliculas.forEach((video) => {
                 if (video.titulo) {
@@ -492,7 +492,37 @@
     const contenedorCerrarPop = document.getElementById('cerrar-pop');
     var jw = null;
     const vast = "https://www.videosprofitnetwork.com/watch.xml?key=79e1ceeb4b2b23705f07f9d03d8920fe";
+
     function openPopJW(cartel) {
+        let listaCalidades = [];
+        if (cartel.url.includes(".aaa.mp4")) {
+            listaCalidades.push({ file: cartel.url.replace(".aaa.mp4", ".aaa.mp4"), label: "1080p | 4.5 mbps", default: true });
+            listaCalidades.push({ file: cartel.url.replace(".aaa.mp4", ".haa.mp4"), label: "1080p | 4.0 mbps" });
+            listaCalidades.push({ file: cartel.url.replace(".aaa.mp4", ".gaa.mp4"), label: "720p  | 2.1 mbps" });
+            listaCalidades.push({ file: cartel.url.replace(".aaa.mp4", ".caa.mp4"), label: "480p  | 1.0 mbps" });
+            listaCalidades.push({ file: cartel.url.replace(".aaa.mp4", ".baa.mp4"), label: "360p  | 640 kbps" });
+            listaCalidades.push({ file: cartel.url.replace(".aaa.mp4", ".oaa.mp4"), label: "360p  | 200 kbps" });
+        } else if (cartel.url.includes(".haa.mp4")) {
+            listaCalidades.push({ file: cartel.url.replace(".haa.mp4", ".haa.mp4"), label: "1080p | 4.0 mbps", default: true });
+            listaCalidades.push({ file: cartel.url.replace(".haa.mp4", ".gaa.mp4"), label: "720p  | 2.1 mbps" });
+            listaCalidades.push({ file: cartel.url.replace(".haa.mp4", ".caa.mp4"), label: "480p  | 1.0 mbps" });
+            listaCalidades.push({ file: cartel.url.replace(".haa.mp4", ".baa.mp4"), label: "360p  | 640 kbps" });
+            listaCalidades.push({ file: cartel.url.replace(".haa.mp4", ".oaa.mp4"), label: "360p  | 200 kbps" });
+        } else if (cartel.url.includes(".gaa.mp4")) {
+            listaCalidades.push({ file: cartel.url.replace(".gaa.mp4", ".gaa.mp4"), label: "720p  | 2.1 mbps", default: true });
+            listaCalidades.push({ file: cartel.url.replace(".gaa.mp4", ".caa.mp4"), label: "480p  | 1.0 mbps" });
+            listaCalidades.push({ file: cartel.url.replace(".gaa.mp4", ".baa.mp4"), label: "360p  | 640 kbps" });
+            listaCalidades.push({ file: cartel.url.replace(".gaa.mp4", ".oaa.mp4"), label: "360p  | 200 kbps" });
+        } else if (cartel.url.includes(".caa.mp4")) {
+            listaCalidades.push({ file: cartel.url.replace(".caa.mp4", ".caa.mp4"), label: "480p  | 1.0 mbps", default: true });
+            listaCalidades.push({ file: cartel.url.replace(".caa.mp4", ".baa.mp4"), label: "360p  | 640 kbps" });
+            listaCalidades.push({ file: cartel.url.replace(".caa.mp4", ".oaa.mp4"), label: "360p  | 200 kbps" });
+        } else if (cartel.url.includes(".baa.mp4")) {
+            listaCalidades.push({ file: cartel.url.replace(".baa.mp4", ".baa.mp4"), label: "360p  | 640 kbps", default: true });
+            listaCalidades.push({ file: cartel.url.replace(".baa.mp4", ".oaa.mp4"), label: "360p  | 200 kbps" });
+        } else if (cartel.url.includes(".oaa.mp4")) {
+            listaCalidades.push({ file: cartel.url.replace(".oaa.mp4", ".oaa.mp4"), label: "360p  | 200 kbps", default: true });
+        }
         closePopJW();
         contenedorTituloPop.textContent = cartel.titulo;
         contenedorDescripcionPop.textContent = cartel.descripcion;
@@ -500,7 +530,8 @@
         var videoKey = "progreso_" + cartel.id; // Clave única por video
         jw = jwplayer("jw-player").setup({
             "debug": 1,
-            "file": cartel.url,
+            //"file": cartel.url,
+            "sources": listaCalidades,
             "image": cartel.poster,
             "title": cartel.titulo,
             "description": cartel.descripcion,
@@ -514,6 +545,9 @@
                 "position": "top-right" //position of watermark on player
             },
             "preload": "metadata",
+            "floating": {
+                "dismissible": true
+            },
             "repeat": false,
             "sharing": false,
             //{
@@ -589,12 +623,12 @@
 
 
 
-
+            //"playlist": serieData,
             "horizontalVolumeSlider": true,
             "volume": 100,
             "nextupoffset": -30,
             "related": {
-                "autoplaytimer": 10,
+                "autoplaytimer": 20,
                 "oncomplete": "autoplay"
             },
             "intl": {
