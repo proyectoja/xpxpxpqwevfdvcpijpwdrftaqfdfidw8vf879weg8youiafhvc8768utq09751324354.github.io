@@ -83,16 +83,12 @@
 
         /* 📌 Para tablets (768px - 1024px) */
         @media (min-width: 1024px) {
-            .contenedor-principal .contenedor-lista {
-                
-            }
+            .contenedor-principal .contenedor-lista {}
         }
 
         /* 📌 Para teléfonos grandes (480px - 768px) */
         @media (min-width: 768px) {
-            .contenedor-principal .contenedor-lista {
-                
-            }
+            .contenedor-principal .contenedor-lista {}
         }
 
         /* 📌 Para teléfonos pequeños (menos de 480px) */
@@ -307,6 +303,26 @@
             text-shadow: 0 0 10px black;
             box-shadow: inset 0 0 10px black;
         }
+        #anuncio-container1{
+            display: flex;
+            position: absolute;
+            z-index: 4;
+            pointer-events: none;
+            width: 100%;
+            min-width: 320px;
+            justify-content: center;
+            align-items: center;
+            height: 50px;
+            bottom: 50px;
+            left: 0;
+            overflow: hidden;
+        }
+        #anuncio-container2{
+            overflow: hidden;
+            height: 60px;
+            justify-content: center;
+            align-items: center;
+        }
     </style>
 </head>
 
@@ -316,6 +332,7 @@
         <div class="contenedor-cont-pelis">Total: 0 películas</div>
         <div class="contenedor-lista"></div>
     </div>
+    <div id="anuncio-container1"></div>
     <div class="contenedor-buscador">
         <input type="search" id="buscar" placeholder="...Buscar película...">
     </div>
@@ -343,6 +360,7 @@
         <div id="titulo-pop"></div>
         <div id="descripcion-pop"></div>
         <div id="metadata-pop"></div>
+        <div id="anuncio-container2"></div>
         <div id="cerrar-pop" onclick="closePopJW()">Cerrar</div>
     </div>
 </body>
@@ -587,6 +605,109 @@
             jw.remove();
             jw = null;
             contenedorJWPLAYER.style.display = 'none';
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded',function(){
+        anunciosAdsterra();
+    });
+    //Anucios publicitarios
+    function anunciosAdsterra() {
+        let contador = 0; // Contador para llevar el seguimiento del número de veces que se han mostrado los anuncios
+        const limite = 10; // Número de veces que los anuncios se mostrarán antes de la pausa
+        const pausa = 5 * 60 * 1000; // 5 minutos en milisegundos
+        let intervaloID; // Variable para almacenar el ID del intervalo
+
+        // Función para actualizar los anuncios
+        function actualizarAnuncios() {
+            if (contador < limite) {
+                // Actualizar los tres anuncios
+                actualizarAnuncio1();
+                setTimeout(actualizarAnuncio2, 1000);
+                contador++;
+            } else {
+                // Pausa de 5 minutos
+                console.log("Pausa de 5 minutos...");
+                setTimeout(() => {
+                    contador = 0; // Reiniciar el contador después de la pausa
+                    console.log("Reiniciando presentación de anuncios...");
+                    actualizarAnuncios(); // Volver a mostrar los anuncios después de la pausa
+                }, pausa);
+            }
+        }
+
+        // Funciones para actualizar cada uno de los anuncios
+        function actualizarAnuncio1() {
+            const anuncioContainer = document.getElementById("anuncio-container1");
+            anuncioContainer.innerHTML = "";
+
+            const scriptElem = document.createElement("script");
+            scriptElem.type = "text/javascript";
+            window.atOptions = {
+                key: "79bb9ca33a7d07d3549457e73fbfb48b",
+                format: "iframe",
+                height: 50,
+                width: 320,
+                params: {},
+            };
+            scriptElem.src =
+                "//www.highperformanceformat.com/79bb9ca33a7d07d3549457e73fbfb48b/invoke.js";
+            anuncioContainer.appendChild(scriptElem);
+        }
+
+        function actualizarAnuncio2() {
+            const anuncioContainer = document.getElementById("anuncio-container2");
+            anuncioContainer.innerHTML = "";
+
+            const scriptElem = document.createElement("script");
+            scriptElem.type = "text/javascript";
+            window.atOptions = {
+                key: "7dc2060ac0381104aea2ca2cfce56eba",
+                format: "iframe",
+                height: 60,
+                width: 468,
+                params: {},
+            };
+            scriptElem.src =
+                "//www.highperformanceformat.com/7dc2060ac0381104aea2ca2cfce56eba/invoke.js";
+            anuncioContainer.appendChild(scriptElem);
+        }
+
+        // Función para iniciar la actualización de anuncios
+        function iniciarActualizacion() {
+            if (!intervaloID) {
+                console.log("Iniciando actualización de anuncios...");
+                intervaloID = setInterval(actualizarAnuncios, 20000);
+            }
+        }
+
+        // Función para detener la actualización de anuncios
+        function detenerActualizacion() {
+            if (intervaloID) {
+                clearInterval(intervaloID);
+                intervaloID = null;
+                console.log("Actualización de anuncios detenida.");
+            }
+        }
+
+        // Detectar cuando la pestaña está visible o el mouse está en la pestaña
+        document.addEventListener("visibilitychange", () => {
+            if (document.visibilityState === "visible") {
+                iniciarActualizacion();
+            } else {
+                detenerActualizacion();
+            }
+        });
+
+        window.addEventListener("mousemove", () => {
+            if (document.visibilityState === "visible") {
+                iniciarActualizacion();
+            }
+        });
+
+        // Inicia la actualización si la página está visible al cargar
+        if (document.visibilityState === "visible") {
+            iniciarActualizacion();
         }
     }
 </script>
