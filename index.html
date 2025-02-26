@@ -257,7 +257,6 @@
             left: 0;
             align-items: center;
             background-color: rgba(0, 0, 0, 0.8);
-            border: 1px solid rgba(255, 255, 255, 0.5);
             color: white;
             font-family: Verdana, Geneva, Tahoma, sans-serif;
             font-size: 16px;
@@ -303,7 +302,8 @@
             text-shadow: 0 0 10px black;
             box-shadow: inset 0 0 10px black;
         }
-        #anuncio-container1{
+
+        #anuncio-container1 {
             display: flex;
             position: absolute;
             z-index: 4;
@@ -317,9 +317,16 @@
             left: 0;
             overflow: hidden;
         }
-        #anuncio-container2{
+
+        #anuncio-container2 {
+            display: flex;
+            position: relative;
             overflow: hidden;
-            height: 60px;
+            width: 100%;
+            min-width: 468px;
+            height: 100%;
+            min-height: 60px;
+            max-height: 60px;
             justify-content: center;
             align-items: center;
         }
@@ -411,11 +418,11 @@
 
         const calidadAux = document.createElement('div');
         calidadAux.className = 'contenedor-calidad';
-        if (cartel.calidad === '1') {
+        if (cartel.url.includes('.caa.mp4')) {
             calidadAux.textContent = 'SD';
-        } else if (cartel.calidad === '2') {
+        } else if (cartel.url.includes('.gaa.mp4')) {
             calidadAux.textContent = 'HD';
-        } else if (cartel.calidad === '3') {
+        } else if (cartel.url.includes('.haa.mp4')) {
             calidadAux.textContent = 'FULLHD';
         } else if (cartel.calidad === '4') {
             calidadAux.textContent = '60FPS';
@@ -490,6 +497,7 @@
         contenedorTituloPop.textContent = cartel.titulo;
         contenedorDescripcionPop.textContent = cartel.descripcion;
         contenedorMetadataPop.textContent = "Año: " + cartel.fecha + " | Duración: " + cartel.duracion;
+        var videoKey = "progreso_" + cartel.id; // Clave única por video
         jw = jwplayer("jw-player").setup({
             "debug": 1,
             "file": cartel.url,
@@ -599,6 +607,26 @@
             }
 
         });
+
+        //Tiempos dinámicos para cada video
+        videoKey = videoKey + cartel.id;
+        //Espera que el reproductor esté listo
+        jw.on("ready", function () {
+            var lastTime = localStorage.getItem(videoKey);
+            if (lastTime) {
+                jw.seek(parseFloat(lastTime)); // Reanudar desde el último tiempo guardado
+            }
+        });
+
+        // Guardar el progreso del video cada 5 segundos
+        jw.on("time", function (event) {
+            localStorage.setItem(videoKey, event.position);
+        });
+
+        // Limpiar el progreso si el video se termina
+        jw.on("complete", function () {
+            localStorage.removeItem(videoKey);
+        });
     }
     function closePopJW() {
         if (jw) {
@@ -608,7 +636,7 @@
         }
     }
 
-    document.addEventListener('DOMContentLoaded',function(){
+    document.addEventListener('DOMContentLoaded', function () {
         anunciosAdsterra();
     });
     //Anucios publicitarios
