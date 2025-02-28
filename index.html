@@ -122,6 +122,12 @@
             white-space: normal;
             word-wrap: break-word;
             color: white;
+
+            display: -webkit-box;
+            -webkit-line-clamp: 2; 
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .contenedor-video h2 {
@@ -422,7 +428,7 @@
             calidadAux.textContent = 'SD';
         } else if (cartel.url.includes('.gaa.mp4')) {
             calidadAux.textContent = 'HD';
-        } else if (cartel.url.includes('.haa.mp4')) {
+        } else if (cartel.url.includes('.haa.mp4') || cartel.url.includes('.aaa.mp4')) {
             calidadAux.textContent = 'FULLHD';
         } else if (cartel.calidad === '4') {
             calidadAux.textContent = '60FPS';
@@ -737,14 +743,14 @@
             const scriptElem = document.createElement("script");
             scriptElem.type = "text/javascript";
             window.atOptions = {
-                key: "79bb9ca33a7d07d3549457e73fbfb48b",
+                key: "88a6bb18554c71538bb646e14b162cc5",
                 format: "iframe",
                 height: 50,
                 width: 320,
                 params: {},
             };
             scriptElem.src =
-                "//www.highperformanceformat.com/79bb9ca33a7d07d3549457e73fbfb48b/invoke.js";
+                "//www.highperformanceformat.com/88a6bb18554c71538bb646e14b162cc5/invoke.js";
             anuncioContainer.appendChild(scriptElem);
         }
 
@@ -755,14 +761,14 @@
             const scriptElem = document.createElement("script");
             scriptElem.type = "text/javascript";
             window.atOptions = {
-                key: "7dc2060ac0381104aea2ca2cfce56eba",
+                key: "46e27ebf2835db11826f50ace565bd99",
                 format: "iframe",
                 height: 60,
                 width: 468,
                 params: {},
             };
             scriptElem.src =
-                "//www.highperformanceformat.com/7dc2060ac0381104aea2ca2cfce56eba/invoke.js";
+                "//www.highperformanceformat.com/46e27ebf2835db11826f50ace565bd99/invoke.js";
             anuncioContainer.appendChild(scriptElem);
         }
 
