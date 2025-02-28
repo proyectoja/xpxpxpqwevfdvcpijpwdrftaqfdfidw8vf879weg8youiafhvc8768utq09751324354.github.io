@@ -440,10 +440,37 @@
             videoItem.appendChild(estrenoAux);
         }
 
+        // Crear imágenes con carga diferida
         const poster = document.createElement("img");
-        poster.src = cartel.miniatura;
-        poster.loading = "lazy";
+        poster.dataset.src = cartel.miniatura; // Guardamos la URL en data-src
         poster.alt = cartel.nombreCanal;
+        poster.classList.add("lazy"); // Agregamos una clase para identificarlas 
+        poster.style.opacity = '0';
+        poster.style.transition = 'opacity 0.8s ease-in-out';
+
+        // Agregar la imagen al DOM
+        document.body.appendChild(poster);
+
+        // Usamos IntersectionObserver para cargar solo cuando la imagen sea visible
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    img.src = img.dataset.src; // Cargar la imagen
+                    //img.removeAttribute("data-src"); // Eliminar el atributo una vez cargado
+                    img.onload = () => { // Esperar a que la imagen se cargue completamente
+                        img.style.opacity = "1"; // Aparecer suavemente
+                    };
+                    observer.unobserve(img); // Dejar de observarla
+                }
+            });
+        }, {
+            rootMargin: "100px" // Carga imágenes antes de que entren en pantalla
+        });
+
+        // Observar todas las imágenes con la clase "lazy"
+        document.querySelectorAll(".lazy").forEach(img => observer.observe(img));
+
 
         const title = document.createElement("h3");
         title.textContent = cartel.titulo;
@@ -491,7 +518,7 @@
     const contenedorMetadataPop = document.getElementById('metadata-pop');
     const contenedorCerrarPop = document.getElementById('cerrar-pop');
     var jw = null;
-    const vast = "https://www.videosprofitnetwork.com/watch.xml?key=79e1ceeb4b2b23705f07f9d03d8920fe";
+    const vast = "https://vast.yomeno.xyz/vast?spot_id=726610";
 
     function openPopJW(cartel) {
         let listaCalidades = [];
@@ -603,6 +630,10 @@
                 "schedule": [
                     {
                         "offset": "pre",
+                        "tag": vast
+                    },
+                    {
+                        "offset": "25%",
                         "tag": vast
                     },
                     {
